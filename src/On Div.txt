@@ -1,0 +1,18 @@
+![DannyOffersYouAnEgg](https://i.imgur.com/3nR0NMi.png)
+
+Apr 6, 2025 12:00 pm
+Apr 6, 2025 3:00 pm
+
+Apr 7, 2025 12:00 pm
+Apr 7, 2025 3:00 pm
+
+00010000 00100000 10101000 10101000 10101000 00000000 00000000 10000000 00000000 00001000 00100010 00100010
+
+
+
+  const expectedBits = gridSize * 8; // 4 bity na komórkę (2 bity dla borders.right, 2 bity dla borders.bottom)
+
+  if (decodedBinary.length !== expectedBits) {
+    console.error("Błąd dekodowania: niezgodna liczba bitów!", decodedBinary.length, expectedBits);
+    return;
+  }
