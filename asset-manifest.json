@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/moj-projekt/static/css/main.d6855596.css",
-    "main.js": "/moj-projekt/static/js/main.d6cc5d15.js",
-    "static/js/453.7968e80a.chunk.js": "/moj-projekt/static/js/453.7968e80a.chunk.js",
-    "index.html": "/moj-projekt/index.html",
-    "main.d6855596.css.map": "/moj-projekt/static/css/main.d6855596.css.map",
-    "main.d6cc5d15.js.map": "/moj-projekt/static/js/main.d6cc5d15.js.map",
-    "453.7968e80a.chunk.js.map": "/moj-projekt/static/js/453.7968e80a.chunk.js.map"
+    "main.css": "/Parquet-/static/css/main.d6855596.css",
+    "main.js": "/Parquet-/static/js/main.46950d9c.js",
+    "static/js/453.7968e80a.chunk.js": "/Parquet-/static/js/453.7968e80a.chunk.js",
+    "index.html": "/Parquet-/index.html",
+    "main.d6855596.css.map": "/Parquet-/static/css/main.d6855596.css.map",
+    "main.46950d9c.js.map": "/Parquet-/static/js/main.46950d9c.js.map",
+    "453.7968e80a.chunk.js.map": "/Parquet-/static/js/453.7968e80a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d6855596.css",
-    "static/js/main.d6cc5d15.js"
+    "static/js/main.46950d9c.js"
   ]
 }
