@@ -350,24 +350,26 @@ const App = () => {
 
       {message && <div className="mt-4 text-xl font-bold text-green-500">{message}</div>}
 
-      <button
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        onClick={GenerateLink}
-      >
-        Save puzzle
-      </button>
-
-      <div className="mt-4 flex flex-col items-center">
-        <label htmlFor="secret" className="mb-2 text-lg">Enter Secret:</label>
-        <input
-          id="secret"
-          type="text"
-          className="px-4 py-2 border-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          placeholder="Enter secret text here"
-          value={secret}
-          onChange={(e) => setSecret(e.target.value)}
-        />
-      </div>
+      <div class="text-left max-w-xl mx-auto my-6 p-4 bg-white shadow-md rounded-lg">
+  <h2 class="text-xl font-bold mb-3">Parquet Puzzle Rules</h2>
+  <ul class="list-disc list-inside space-y-2 text-gray-800">
+    <li>
+      Each bold-outlined region is divided into two subregions. 
+      <strong>Exactly one</strong> of them must be fully shaded.
+    </li>
+    <li>
+      All shaded cells must form a <strong>single orthogonally connected group </strong> 
+       (connected only through edges, not diagonals).
+    </li>
+    <li>
+      <strong>No loops</strong> are allowed in the shaded area. 
+      A loop is a continuous path of shaded cells that closes on itself without branches.
+    </li>
+    <li>
+      <strong>2x2 blocks</strong> of shaded cells are not allowed.
+    </li>
+  </ul>
+</div>
     </div>
   );
 };
