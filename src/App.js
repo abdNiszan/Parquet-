@@ -350,6 +350,7 @@ const App = () => {
 
       {message && <div className="mt-4 text-xl font-bold text-green-500">{message}</div>}
 
+
       <div class="text-left max-w-xl mx-auto my-6 p-4 bg-white shadow-md rounded-lg">
   <h2 class="text-xl font-bold mb-3">Parquet Puzzle Rules</h2>
   <ul class="list-disc list-inside space-y-2 text-gray-800">
