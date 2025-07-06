@@ -256,7 +256,7 @@ const App = () => {
   function encryptAES(plainText) {
     const key = grid.map(row =>
       row.map(cell => (cell.active === 2 ? '1' : '0')).join('')
-    ).join('').slice(0, 16);
+    ).join('');
     setKEY(key);
     plainText = encodeURIComponent(plainText);
     const encrypted = CryptoJS.AES.encrypt(plainText, KEY);
@@ -264,12 +264,15 @@ const App = () => {
   }
 
   // AES Decryption
-  function decryptAES(encryptedText) {
-    const bytes = CryptoJS.AES.decrypt(encryptedText, KEY);
-    let decrypted = bytes.toString(CryptoJS.enc.Utf8);
-    decrypted = decodeURIComponent(decrypted);
-    return decrypted;
-  }
+function decryptAES(encryptedText) {
+    try {
+        const bytes = CryptoJS.AES.decrypt(encryptedText, KEY);
+        const decrypted = decodeURIComponent(bytes.toString(CryptoJS.enc.Utf8));
+        return decrypted;
+    } catch (e) {
+        return "";
+    }
+}
 
   // Create grid from decoded data
   const generateGridByLink = (gridDecoded) => {
@@ -349,7 +352,6 @@ const App = () => {
       </div>
 
       {message && <div className="mt-4 text-xl font-bold text-green-500">{message}</div>}
-
 
       <div class="text-left max-w-xl mx-auto my-6 p-4 bg-white shadow-md rounded-lg">
   <h2 class="text-xl font-bold mb-3">Parquet Puzzle Rules</h2>

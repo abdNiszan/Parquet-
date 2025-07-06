@@ -2,3 +2,105 @@ http://localhost:3000/?s=6x6_CVgRaioiSEhQamoiGEhASEhA_U2FsdGVkX1%2B5T2q%2BVaoReB
 http://localhost:3000/?s=9x12_BYEZEYEQUKIqJqJAKgkBkBhiCWpQplgQWAgqCSpAKgWBWFhiSGKiKioQQYEZRYFQBIAIAIAA_
 http://localhost:3000/?s=10x10_GUgJGVgqamoqKlgZGRhIKioqamoZSUgZSCoqaipqSFhIGQlqKmoqahlIGRhIKmoqamo
 
+
+
+return (
+    <div className="flex flex-col items-center mt-4">
+      <h1 className="text-2xl font-bold mb-4">Parquet Game</h1>
+
+      <div className="grid grid-cols-1 gap-10 mb-4">
+        <div className="space-y-4">
+<button
+  onClick={() => {
+    if (checkRef.current) {
+      checkRef.current(false, gridRef.current);
+    }
+  }}
+>
+  Check answer
+</button>
+    <button
+        onClick={switchToEditMode}
+        className={`px-4 py-2 border-2 rounded ${
+        editModeRef.current ? "bg-blue-500 text-white" : "bg-white text-black"
+        }`}
+    >
+        Edit Mode
+    </button>
+    <button
+      onClick={() => switchBorderMode("soft")}
+      className={`px-4 py-2 border-2 rounded ${borderModeRef.current === "soft" ? "bg-blue-500 text-white" : "bg-white text-black"}`}
+    >
+      Soft Border
+    </button>
+
+    <button
+      onClick={() => switchBorderMode("hard")}
+      className={`px-4 py-2 border-2 rounded ${borderModeRef.current === "hard" ? "bg-blue-500 text-white" : "bg-white text-black"}`}
+    >
+      Hard Border
+    </button>
+        </div>
+
+        <div className="space-y-4">
+    <button
+      onClick={switchToAnswerMode}
+      className={`px-4 py-2 border-2 rounded ${
+        answerModeRef.current ? "bg-blue-500 text-white" : "bg-white text-black"
+      }`}
+    >
+      Answer Mode
+    </button>
+          <button
+            onClick={resetGrid}
+            className="px-4 py-2 border-2 rounded bg-white text-black"
+          >
+            Reset All Answers
+          </button>
+        </div>
+      </div>
+
+      {/* Siatka SVG */}
+          <div className="p-4">
+      <h1 className="text-xl font-bold mb-2">Grid Editor</h1>
+      <PlayMode
+        grid={grid}
+        setGrid={setGrid}
+        gridRef={gridRef}
+        cellRefs={cellRefs}
+        editModeRef={editModeRef}
+        borderModeRef={borderModeRef}
+        setEnclosedAreas={setEnclosedAreas}
+        renderDots={renderDots}
+        answerModeRef={answerModeRef}
+        encodedSecret={encodedSecret}
+        enclosedAreas={enclosedAreas}
+        setMessage={setMessage}
+        setKEY={setKEY}
+        checkGroupsForWinRef={checkRef}
+      />
+
+    </div>      
+      {message && <div className="mt-4 text-xl font-bold text-green-500">{message}</div>}
+
+      <button
+      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      onClick={GenerateLink}
+    >
+      Save puzzle
+      </button>
+
+      <div className="mt-4 flex flex-col items-center">
+        <label htmlFor="secret" className="mb-2 text-lg">Enter Secret:</label>
+        <input
+        id="secret"
+        type="text"
+        className="px-4 py-2 border-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        placeholder="Enter secret text here"
+        value={secret} // Związane z stanem `secret`
+        onChange={(e) => setSecret(e.target.value)} // Aktualizuje stan `secret`
+        />
+      </div>
+    </div>
+  );
+};

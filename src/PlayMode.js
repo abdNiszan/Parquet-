@@ -345,15 +345,16 @@ const [errorMessage, setErrorMessage] = useState("");
         setWasError(true);      
         setErrorMessage("You have not connected areas");
         }
+    } else {
+        // Create encoded message key
+        if (encodedSecret) {
+            const key = grid.map(row =>
+            row.map(cell => (cell.active === 2 ? '1' : '0')).join('')
+            ).join('');
+            setKEY(key);
+        }
     }
 
-    // Create encoded message key
-    if (encodedSecret) {
-        const key = grid.map(row =>
-        row.map(cell => (cell.active === 2 ? '1' : '0')).join('')
-        ).join('').slice(0, 16);
-        setKEY(key);
-    }
   };
 
   const checkFours = async (y, x, onlyWin, grid) => {
