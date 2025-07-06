@@ -1,18 +1,4 @@
-![DannyOffersYouAnEgg](https://i.imgur.com/3nR0NMi.png)
+http://localhost:3000/?s=6x6_CVgRaioiSEhQamoiGEhASEhA_U2FsdGVkX1%2B5T2q%2BVaoReB35yFIZF%2FjaVczodu1O2BMMAsj8ZHvESM9ob1%2BgYjz9
+http://localhost:3000/?s=9x12_BYEZEYEQUKIqJqJAKgkBkBhiCWpQplgQWAgqCSpAKgWBWFhiSGKiKioQQYEZRYFQBIAIAIAA_
+http://localhost:3000/?s=10x10_GUgJGVgqamoqKlgZGRhIKioqamoZSUgZSCoqaipqSFhIGQlqKmoqahlIGRhIKmoqamo
 
-Apr 6, 2025 12:00 pm
-Apr 6, 2025 3:00 pm
-
-Apr 7, 2025 12:00 pm
-Apr 7, 2025 3:00 pm
-
-00010000 00100000 10101000 10101000 10101000 00000000 00000000 10000000 00000000 00001000 00100010 00100010
-
-
-
-  const expectedBits = gridSize * 8; // 4 bity na komórkę (2 bity dla borders.right, 2 bity dla borders.bottom)
-
-  if (decodedBinary.length !== expectedBits) {
-    console.error("Błąd dekodowania: niezgodna liczba bitów!", decodedBinary.length, expectedBits);
-    return;
-  }
