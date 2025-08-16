@@ -1,9 +1,8 @@
-http://localhost:3000/?s=6x6_CVgRaioiSEhQamoiGEhASEhA_U2FsdGVkX1%2B5T2q%2BVaoReB35yFIZF%2FjaVczodu1O2BMMAsj8ZHvESM9ob1%2BgYjz9
-http://localhost:3000/?s=9x12_BYEZEYEQUKIqJqJAKgkBkBhiCWpQplgQWAgqCSpAKgWBWFhiSGKiKioQQYEZRYFQBIAIAIAA_
-http://localhost:3000/?s=10x10_GUgJGVgqamoqKlgZGRhIKioqamoZSUgZSCoqaipqSFhIGQlqKmoqahlIGRhIKmoqamo
+http://localhost:3000/Parquet-/?s=16x16_GUhJGVgYSUkqaioqKmoqKhkJWEgZSUhJKmoqaioqaioYCRlYWAkYCWpqKioqampqSEhICQlICUhqampqampqalgZGUlYSEhJKioqKipqaipJSEgZWBkYCSpqaioqKmpqGBhYCUhISRhqaipqamoqakhIGAkZGAlYampqaipqaio=_
 
 
 
+Debug:
 return (
     <div className="flex flex-col items-center mt-4">
       <h1 className="text-2xl font-bold mb-4">Parquet Game</h1>
@@ -101,6 +100,77 @@ return (
         onChange={(e) => setSecret(e.target.value)} // Aktualizuje stan `secret`
         />
       </div>
+    </div>
+  );
+};
+
+
+PlayMode:
+  return (
+    <div className="flex flex-col items-center mt-4">
+      <h1 className="text-2xl font-bold mb-4">Parquet Game</h1>
+
+      <div className="flex grid-cols-1 gap-10 mb-4">        
+        <button
+          onClick={() => {
+            if (checkRef.current) {
+              checkRef.current(false, gridRef.current);
+            }
+          }}
+          className="px-4 py-2 border-2 rounded bg-white text-black"
+        >
+          Check answer
+        </button>
+
+        <button
+          onClick={resetGrid}
+          className="px-4 py-2 border-2 rounded bg-white text-black"
+        >
+          Reset All Answers
+        </button>        
+      </div>
+
+      <div className="p-4">
+        <PlayMode
+          grid={grid}
+          setGrid={setGrid}
+          gridRef={gridRef}
+          cellRefs={cellRefs}
+          editModeRef={editModeRef}
+          borderModeRef={borderModeRef}
+          setEnclosedAreas={setEnclosedAreas}
+          renderDots={renderDots}
+          answerModeRef={answerModeRef}
+          encodedSecret={encodedSecret}
+          enclosedAreas={enclosedAreas}
+          setMessage={setMessage}
+          setKEY={setKEY}
+          checkGroupsForWinRef={checkRef}
+        />
+      </div>
+
+      {message && <div className="mt-4 text-xl font-bold text-green-500">{message}</div>}
+
+      <div class="text-left max-w-xl mx-auto my-6 p-4 bg-white shadow-md rounded-lg">
+  <h2 class="text-xl font-bold mb-3">Parquet Puzzle Rules</h2>
+  <ul class="list-disc list-inside space-y-2 text-gray-800">
+    <li>
+      Each bold-outlined region is divided into two subregions. 
+      <strong>Exactly one</strong> of them must be fully shaded.
+    </li>
+    <li>
+      All shaded cells must form a <strong>single orthogonally connected group </strong> 
+       (connected only through edges, not diagonals).
+    </li>
+    <li>
+      <strong>No loops</strong> are allowed in the shaded area. 
+      A loop is a continuous path of shaded cells that closes on itself without branches.
+    </li>
+    <li>
+      <strong>2x2 blocks</strong> of shaded cells are not allowed.
+    </li>
+  </ul>
+</div>
     </div>
   );
 };

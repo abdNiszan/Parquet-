@@ -9,7 +9,9 @@ const GridEdit = ({
   borderModeRef,
   enclosedAreas,
   setEnclosedAreas,
-  toggleTile,  // Odbieramy toggleTile jako props
+  toggleTile,
+  handleTouchStart,
+  handleTouchEnd,
   wasError
 }) => {
 
@@ -129,93 +131,98 @@ useEffect(() => {
     return { row, col, type: "none" };
   };
 
-  const renderSquaresAndBorders = (grid) => {
-    const elements = [];
+const renderSquaresAndBorders = (grid) => {
+  const elements = [];
 
-    for (let row = 0; row < grid.length; row++) {
-      for (let col = 0; col < grid[0].length; col++) {
+  for (let row = 0; row < grid.length; row++) {
+    for (let col = 0; col < grid[0].length; col++) {
+      elements.push(
+        <rect
+          ref={(el) => (cellRefs.current[`square-${row}-${col}`] = el)}
+          key={`square-${row}-${col}`}
+          x={col * 50}
+          y={row * 50}
+          width={50}
+          height={50}
+          fill={
+            grid[row][col].color === "red" && wasError
+              ? "blue"
+              : grid[row][col].active === 3
+              ? "gray"
+              : grid[row][col].active === 2
+              ? "black"
+              : grid[row][col].active === 1
+              ? "green"
+              : "white"
+          }
+          onMouseDown={(e) => toggleTile(row, col, e)}
+          onTouchStart={() => handleTouchStart(row, col)}
+          onTouchEnd={() => handleTouchEnd(row, col)}
+          onContextMenu={(e) => e.preventDefault()}
+        />
+      );
+
+      // Right border
+      if (col < grid[0].length - 1) {
         elements.push(
-          <rect
-            ref={(el) => (cellRefs.current[`square-${row}-${col}`] = el)}
-            key={`square-${row}-${col}`}
-            x={col * 50}
-            y={row * 50}
-            width={50}
-            height={50}
-            fill={
-              grid[row][col].color === "red" && wasError
-                ? "blue"
-                : grid[row][col].active === 2
+          <line
+            key={`h-border-${row}-${col}`}
+            ref={(el) => (borderRefs.current[`h-${row}-${col}`] = el)}
+            x1={(col + 1) * 50}
+            y1={row * 50}
+            x2={(col + 1) * 50}
+            y2={(row + 1) * 50}
+            stroke={
+              grid[row][col].borders.right === 1
+                ? "gray"
+                : grid[row][col].borders.right === 2
                 ? "black"
-                : grid[row][col].active === 1
-                ? "green"
-                : "white"
+                : "transparent"
             }
-            onClick={() => toggleTile(row, col)}  // Klikniêcie zmienia stan komórki
+            strokeWidth={
+              grid[row][col].borders.right === 1
+                ? 3
+                : grid[row][col].borders.right === 2
+                ? 6
+                : 0
+            }
           />
         );
+      }
 
-        // Right border
-        if (col < grid[0].length - 1) {
-          elements.push(
-            <line
-              key={`h-border-${row}-${col}`}
-              ref={(el) => (borderRefs.current[`h-${row}-${col}`] = el)}
-              x1={(col + 1) * 50}
-              y1={row * 50}
-              x2={(col + 1) * 50}
-              y2={(row + 1) * 50}
-              stroke={ 
-                grid[row][col].borders.right === 1
-                  ? "gray"
-                  : grid[row][col].borders.right === 2
-                  ? "black"
-                  : "transparent"
-              }
-              strokeWidth={
-                grid[row][col].borders.right === 1
-                  ? 3
-                  : grid[row][col].borders.right === 2
-                  ? 6
-                  : 0
-              }
-            />
-          );
-        }
-
-        // Bottom border
-        if (row < grid.length - 1) {
-          elements.push(
-            <line
-              key={`v-border-${row}-${col}`}
-              ref={(el) => (borderRefs.current[`v-${row}-${col}`] = el)}
-              x1={(col - 0.025) * 50}
-              y1={(row + 1) * 50}
-              x2={(col + 1) * 50}
-              y2={(row + 1) * 50}
-              stroke={ 
-                grid[row][col].borders.bottom === 1
-                  ? "gray"
-                  : grid[row][col].borders.bottom === 2
-                  ? "black"
-                  : "transparent"
-              }
-              strokeWidth={
-                grid[row][col].borders.bottom === 1
-                  ? 3
-                  : grid[row][col].borders.bottom === 2
-                  ? 6
-                  : 0
-              }
-            />
-          );
-        }
+      // Bottom border
+      if (row < grid.length - 1) {
+        elements.push(
+          <line
+            key={`v-border-${row}-${col}`}
+            ref={(el) => (borderRefs.current[`v-${row}-${col}`] = el)}
+            x1={(col - 0.025) * 50}
+            y1={(row + 1) * 50}
+            x2={(col + 1) * 50}
+            y2={(row + 1) * 50}
+            stroke={
+              grid[row][col].borders.bottom === 1
+                ? "gray"
+                : grid[row][col].borders.bottom === 2
+                ? "black"
+                : "transparent"
+            }
+            strokeWidth={
+              grid[row][col].borders.bottom === 1
+                ? 3
+                : grid[row][col].borders.bottom === 2
+                ? 6
+                : 0
+            }
+          />
+        );
       }
     }
+  }
 
-    gridRef.current = grid;
-    return elements;
-  };
+  gridRef.current = grid;
+  return elements;
+};
 
   const renderDots = () => {
     const dotElements = [];

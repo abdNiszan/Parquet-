@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 import CheckButton from './checkButton';
 import GridEdit from './GridEdit';
 import handleCheckGrid from './GridAreas';
-import PlayMode from './PlayMode';  // Make sure the path is correct
+import PlayMode from './PlayMode';
 
 const App = () => {
   const [GRID_SIZE, setGRID_SIZE] = useState({ y: 6, x: 6 });
@@ -254,9 +254,11 @@ const App = () => {
 
   // AES Encryption
   function encryptAES(plainText) {
-    const key = grid.map(row =>
-      row.map(cell => (cell.active === 2 ? '1' : '0')).join('')
-    ).join('');
+    const key = grid
+      .map(row =>
+        row.map(cell => (cell.active === 2 || cell.active === 3 ? '1' : '0')).join('')
+      )
+      .join('');
     setKEY(key);
     plainText = encodeURIComponent(plainText);
     const encrypted = CryptoJS.AES.encrypt(plainText, KEY);
@@ -308,71 +310,103 @@ function decryptAES(encryptedText) {
     setGrid(newGrid);
   };
 
-  return (
+return (
     <div className="flex flex-col items-center mt-4">
       <h1 className="text-2xl font-bold mb-4">Parquet Game</h1>
 
-      <div className="flex grid-cols-1 gap-10 mb-4">        
-        <button
-          onClick={() => {
-            if (checkRef.current) {
-              checkRef.current(false, gridRef.current);
-            }
-          }}
-          className="px-4 py-2 border-2 rounded bg-white text-black"
-        >
-          Check answer
-        </button>
+      <div className="grid grid-cols-1 gap-10 mb-4">
+        <div className="space-y-4">
+<button
+  onClick={() => {
+    if (checkRef.current) {
+      checkRef.current(false, gridRef.current);
+    }
+  }}
+>
+  Check answer
+</button>
+    <button
+        onClick={switchToEditMode}
+        className={`px-4 py-2 border-2 rounded ${
+        editModeRef.current ? "bg-blue-500 text-white" : "bg-white text-black"
+        }`}
+    >
+        Edit Mode
+    </button>
+    <button
+      onClick={() => switchBorderMode("soft")}
+      className={`px-4 py-2 border-2 rounded ${borderModeRef.current === "soft" ? "bg-blue-500 text-white" : "bg-white text-black"}`}
+    >
+      Soft Border
+    </button>
 
-        <button
-          onClick={resetGrid}
-          className="px-4 py-2 border-2 rounded bg-white text-black"
-        >
-          Reset All Answers
-        </button>        
+    <button
+      onClick={() => switchBorderMode("hard")}
+      className={`px-4 py-2 border-2 rounded ${borderModeRef.current === "hard" ? "bg-blue-500 text-white" : "bg-white text-black"}`}
+    >
+      Hard Border
+    </button>
+        </div>
+
+        <div className="space-y-4">
+    <button
+      onClick={switchToAnswerMode}
+      className={`px-4 py-2 border-2 rounded ${
+        answerModeRef.current ? "bg-blue-500 text-white" : "bg-white text-black"
+      }`}
+    >
+      Answer Mode
+    </button>
+          <button
+            onClick={resetGrid}
+            className="px-4 py-2 border-2 rounded bg-white text-black"
+          >
+            Reset All Answers
+          </button>
+        </div>
       </div>
 
-      <div className="p-4">
-        <PlayMode
-          grid={grid}
-          setGrid={setGrid}
-          gridRef={gridRef}
-          cellRefs={cellRefs}
-          editModeRef={editModeRef}
-          borderModeRef={borderModeRef}
-          setEnclosedAreas={setEnclosedAreas}
-          renderDots={renderDots}
-          answerModeRef={answerModeRef}
-          encodedSecret={encodedSecret}
-          enclosedAreas={enclosedAreas}
-          setMessage={setMessage}
-          setKEY={setKEY}
-          checkGroupsForWinRef={checkRef}
-        />
-      </div>
+      {/* SVG Grid */}
+          <div className="p-4">
+      <h1 className="text-xl font-bold mb-2">Grid Editor</h1>
+      <PlayMode
+        grid={grid}
+        setGrid={setGrid}
+        gridRef={gridRef}
+        cellRefs={cellRefs}
+        editModeRef={editModeRef}
+        borderModeRef={borderModeRef}
+        setEnclosedAreas={setEnclosedAreas}
+        renderDots={renderDots}
+        answerModeRef={answerModeRef}
+        encodedSecret={encodedSecret}
+        enclosedAreas={enclosedAreas}
+        setMessage={setMessage}
+        setKEY={setKEY}
+        checkGroupsForWinRef={checkRef}
+      />
 
+    </div>      
       {message && <div className="mt-4 text-xl font-bold text-green-500">{message}</div>}
 
-      <div class="text-left max-w-xl mx-auto my-6 p-4 bg-white shadow-md rounded-lg">
-  <h2 class="text-xl font-bold mb-3">Parquet Puzzle Rules</h2>
-  <ul class="list-disc list-inside space-y-2 text-gray-800">
-    <li>
-      Each bold-outlined region is divided into two subregions. 
-      <strong>Exactly one</strong> of them must be fully shaded.
-    </li>
-    <li>
-      All shaded cells must form a <strong>single orthogonally connected group </strong> 
-       (connected only through edges, not diagonals).
-    </li>
-    <li>
-      <strong>No loops</strong> are allowed in the shaded area. 
-      A loop is a continuous path of shaded cells that closes on itself without branches.
-    </li>
-    <li>
-      <strong>2x2 blocks</strong> of shaded cells are not allowed.
-    </li>
-  </ul>
-</div>
+      <button
+      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      onClick={GenerateLink}
+    >
+      Save puzzle
+      </button>
+
+      <div className="mt-4 flex flex-col items-center">
+        <label htmlFor="secret" className="mb-2 text-lg">Enter Secret:</label>
+        <input
+        id="secret"
+        type="text"
+        className="px-4 py-2 border-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        placeholder="Enter secret text here"
+        value={secret}
+        onChange={(e) => setSecret(e.target.value)} 
+        />
+      </div>
     </div>
   );
 };

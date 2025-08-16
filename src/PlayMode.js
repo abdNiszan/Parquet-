@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import GridEdit from './GridEdit'; // Za³ó¿my, ¿e importujesz GridEdit
+import GridEdit from './GridEdit';
 
 const PlayMode = ({  
     grid,
@@ -49,58 +49,98 @@ const [errorMessage, setErrorMessage] = useState("");
       setEnclosedAreas(enclosedAreas);
     }, [enclosedAreas]);
 
-  const toggleTile = (x, y) => {
-    if (!answerModeRef.current) return;
+const toggleTile = (x, y, e) => {
+  if (!answerModeRef.current) return;
 
-    const grid = gridRef.current.slice();
-    const clickedGroup = grid[x][y].group;
-    if (!clickedGroup) return;
+  if (e?.preventDefault) {
+    e.preventDefault();
+  }
 
-    const groupNumber = clickedGroup.match(/^\d+/)?.[0];
-    const isActive = grid[x][y].active === 2;
+  const grid = gridRef.current.slice();
+  const clickedGroup = grid[x][y].group;
+  if (!clickedGroup) return;
 
-    for (let i = 0; i < grid.length; i++) {
-      for (let j = 0; j < grid[i].length; j++) {
-        const cell = grid[i][j];
-        const cellGroup = cell.group;
-        if (!cellGroup) continue;
+  const groupNumber = clickedGroup.match(/^\d+/)?.[0];
+  const isActive = ((grid[x][y].active === 2 && e.button === 0) || (grid[x][y].active === 3 && e.button === 2));
 
-        const cellGroupNumber = cellGroup.match(/^\d+/)?.[0];
-        const ref = cellRefs.current[`square-${i}-${j}`];
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      const cell = grid[i][j];
+      const cellGroup = cell.group;
+      if (!cellGroup) continue;
 
-        if (isActive) {
-          if (cellGroupNumber === groupNumber) {
-            cell.active = 0;
+      const cellGroupNumber = cellGroup.match(/^\d+/)?.[0];
+
+      if (isActive) {
+        if (cellGroupNumber === groupNumber) {
+          cell.active = 0;
+          setColors(prevColors => ({
+            ...prevColors,
+            [`square-${i}-${j}`]: 'white',
+          }));
+        }
+      } else {
+        if (cellGroup === clickedGroup) {
+          if (e.button === 2) {
+            cell.active = 3;
             setColors(prevColors => ({
               ...prevColors,
-              [`square-${i}-${j}`]: 'white',
+              [`square-${i}-${j}`]: 'gray',
             }));
-          }
-        } else {
-          if (cellGroup === clickedGroup) {
+          } else {
             cell.active = 2;
             setColors(prevColors => ({
               ...prevColors,
               [`square-${i}-${j}`]: 'black',
             }));
-          } else if (cellGroupNumber === groupNumber) {
-            cell.active = 1;
-            setColors(prevColors => ({
-              ...prevColors,
-              [`square-${i}-${j}`]: 'green',
-            }));
           }
+        } else if (cellGroupNumber === groupNumber) {
+          cell.active = 1;
+          setColors(prevColors => ({
+            ...prevColors,
+            [`square-${i}-${j}`]: 'green',
+          }));
         }
       }
     }
+  }
 
-    resetErrorColors();
+  resetErrorColors();
 
-    const hasAnyZero = grid.some(row => row.some(cell => cell.active === 0));
-    if (!hasAnyZero) {
-      checkGroupsForWin(true, gridRef.current);
-    }
-  };
+  const hasAnyZero = grid.some(row => row.some(cell => cell.active === 0));
+  if (!hasAnyZero) {
+    checkGroupsForWin(true, gridRef.current);
+  }
+};
+
+let lastTap = 0;
+let touchTimeout = null;
+
+const handleTouchStart = (x, y) => {
+  const now = Date.now();
+  const DOUBLE_TAP_DELAY = 300;
+  const LONG_PRESS_DELAY = 500;
+
+  if (now - lastTap < DOUBLE_TAP_DELAY) {
+    clearTimeout(touchTimeout);
+    toggleTile(x, y, { button: 2 });
+  } else {    
+    touchTimeout = setTimeout(() => {
+      toggleTile(x, y, { button: 2 }); 
+    }, LONG_PRESS_DELAY);
+  }
+
+  lastTap = now;
+};
+
+const handleTouchEnd = (x, y) => {
+  if (touchTimeout) {
+    clearTimeout(touchTimeout);
+    //toggleTile(x, y, { button: 0 });
+  }
+};
+
+
 
   const checkGroupsForWin = async (onlyWin, grid) => {
     resetErrorColors();
@@ -111,25 +151,6 @@ const [errorMessage, setErrorMessage] = useState("");
     const visited = [];
 
     let emptyGroup = [];
-
-    // Checking not filled places
-    for (let y = 0; y < grid.length; y++) {
-      for (let x = 0; x < grid[y].length; x++) {
-          if (grid[y][x].active === 0) {
-              if (!emptyGroup.includes(grid[y][x].group.split("")[0])) {
-                  emptyGroup.push(grid[y][x].group.split("")[0]);
-              }
-
-              grid[y][x].color = 'red';
-          }
-      }
-    }
-    
-    if (emptyGroup.length > 0) {
-        setErrorMessage("You still have empty areas");
-        setWasError(true);
-        return;
-    }
     
     // Check if there are areas creating 2x2 fillings
     const checkFoursPromises = [];
@@ -137,7 +158,7 @@ const [errorMessage, setErrorMessage] = useState("");
     for (let y = 0; y < grid.length; y++) {
       for (let x = 0; x < grid[y].length; x++) {
         const cell = grid[y][x];
-        if (cell.active === 2) {
+        if (cell.active === 2 || cell.active === 3) {
             checkFoursPromises.push(checkFours(y, x, onlyWin, grid));
         }
       }
@@ -248,7 +269,7 @@ const [errorMessage, setErrorMessage] = useState("");
 
           if (groupKeys[keyCoord]) continue;
 
-          if (grid[ny][nx].active === 1) {
+          if (grid[ny][nx].active === 1 || grid[ny][nx].active === 0) {
             isLooped = false;
             break;
           } else {
@@ -281,7 +302,7 @@ const [errorMessage, setErrorMessage] = useState("");
       for (let x = 0; x < grid[y].length; x++) {
         if (!visitedBool[y][x]) {
           const cell = grid[y][x];
-          if (cell.active === 2) {
+          if (cell.active === 2 || cell.active === 3) {
             visitedGroup[z] = [];
             visited.push([y, x]);
             visitedBool[y][x] = true;
@@ -346,15 +367,33 @@ const [errorMessage, setErrorMessage] = useState("");
         setErrorMessage("You have not connected areas");
         }
     } else {
+        // Checking not filled places
+        for (let y = 0; y < grid.length; y++) {
+          for (let x = 0; x < grid[y].length; x++) {
+              if (grid[y][x].active === 0) {
+                  if (!emptyGroup.includes(grid[y][x].group.split("")[0])) {
+                      emptyGroup.push(grid[y][x].group.split("")[0]);
+                  }
+
+                  grid[y][x].color = 'red';
+              }
+          }
+        }
+    
+        if (emptyGroup.length > 0) {
+            setErrorMessage("You still have empty areas");
+            setWasError(true);
+            return;
+        }
+
         // Create encoded message key
         if (encodedSecret) {
             const key = grid.map(row =>
-            row.map(cell => (cell.active === 2 ? '1' : '0')).join('')
+                row.map(cell => (cell.active === 2 || cell.active === 3 ? '1' : '0')).join('')
             ).join('');
             setKEY(key);
         }
     }
-
   };
 
   const checkFours = async (y, x, onlyWin, grid) => {
@@ -372,7 +411,7 @@ const [errorMessage, setErrorMessage] = useState("");
       for (const { dy, dx } of dirsToCheck) {
         const ny = y + dy;
         const nx = x + dx;
-        if (ny >= 0 && ny < grid.length && nx >= 0 && nx < grid[0].length && grid[ny][nx].active === 2) {
+        if (ny >= 0 && ny < grid.length && nx >= 0 && nx < grid[0].length && (grid[ny][nx].active === 2 || grid[ny][nx].active === 3)) {
           detectedFour++;
           coords.push([ny, nx]);
         }
@@ -444,7 +483,7 @@ const checkPath = async (z, y, x, lastDir, visitedGroup, visited, visitedBool, g
 
       visitedBool[ny][nx] = true;
 
-      if (nextCell.active === 2) {
+      if (nextCell.active === 2 || nextCell.active === 3) {
         visited.push([ny, nx]);
 
         if (!visitedGroup[z].includes(nextCell.group)) {
@@ -507,6 +546,8 @@ function areGroupsAdjacent(groupA, groupB) {
         enclosedAreas={enclosedAreas}
         setEnclosedAreas={setEnclosedAreas}
         toggleTile={toggleTile}
+        handleTouchStart={handleTouchStart}
+        handleTouchEnd={handleTouchEnd}
         wasError={wasError}
       />
       {renderErrorMessage()}
