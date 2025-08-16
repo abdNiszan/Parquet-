@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/Parquet-/static/css/main.d6855596.css",
-    "main.js": "/Parquet-/static/js/main.80bd3864.js",
+    "main.css": "/Parquet-/static/css/main.d6fdee3f.css",
+    "main.js": "/Parquet-/static/js/main.9dadb50d.js",
     "static/js/453.7968e80a.chunk.js": "/Parquet-/static/js/453.7968e80a.chunk.js",
+    "static/media/parquet-rules-hint.png": "/Parquet-/static/media/parquet-rules-hint.e0e1ae209843d90914f3.png",
     "index.html": "/Parquet-/index.html",
-    "main.d6855596.css.map": "/Parquet-/static/css/main.d6855596.css.map",
-    "main.80bd3864.js.map": "/Parquet-/static/js/main.80bd3864.js.map",
+    "main.d6fdee3f.css.map": "/Parquet-/static/css/main.d6fdee3f.css.map",
+    "main.9dadb50d.js.map": "/Parquet-/static/js/main.9dadb50d.js.map",
     "453.7968e80a.chunk.js.map": "/Parquet-/static/js/453.7968e80a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d6855596.css",
-    "static/js/main.80bd3864.js"
+    "static/css/main.d6fdee3f.css",
+    "static/js/main.9dadb50d.js"
   ]
 }
