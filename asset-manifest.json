@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Parquet-/static/css/main.6ed0e18c.css",
+    "main.js": "/Parquet-/static/js/main.c5eddee6.js",
+    "static/js/453.7968e80a.chunk.js": "/Parquet-/static/js/453.7968e80a.chunk.js",
+    "index.html": "/Parquet-/index.html",
+    "main.6ed0e18c.css.map": "/Parquet-/static/css/main.6ed0e18c.css.map",
+    "main.c5eddee6.js.map": "/Parquet-/static/js/main.c5eddee6.js.map",
+    "453.7968e80a.chunk.js.map": "/Parquet-/static/js/453.7968e80a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6ed0e18c.css",
+    "static/js/main.c5eddee6.js"
+  ]
+}
