@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/Parquet-/static/css/main.cac30f17.css",
-    "main.js": "/Parquet-/static/js/main.c1019631.js",
+    "main.js": "/Parquet-/static/js/main.49fea863.js",
     "static/js/453.9b936b41.chunk.js": "/Parquet-/static/js/453.9b936b41.chunk.js",
     "static/media/parquet-rules-hint-darkmode.png": "/Parquet-/static/media/parquet-rules-hint-darkmode.0780a3c3015b8a65eeed.png",
     "static/media/parquet-rules-hint.png": "/Parquet-/static/media/parquet-rules-hint.e0e1ae209843d90914f3.png",
     "index.html": "/Parquet-/index.html",
     "main.cac30f17.css.map": "/Parquet-/static/css/main.cac30f17.css.map",
-    "main.c1019631.js.map": "/Parquet-/static/js/main.c1019631.js.map",
+    "main.49fea863.js.map": "/Parquet-/static/js/main.49fea863.js.map",
     "453.9b936b41.chunk.js.map": "/Parquet-/static/js/453.9b936b41.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cac30f17.css",
-    "static/js/main.c1019631.js"
+    "static/js/main.49fea863.js"
   ]
 }
